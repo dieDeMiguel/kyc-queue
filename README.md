@@ -1,20 +1,14 @@
 # KYC Review Queue
 
-A role-aware KYC operations workspace built with Next.js, Prisma, and SQLite.
+A role-aware KYC review queue: an applicant queue, a review flow with
+approve/reject decisions, role-based access control, and an audit log.
+Built with Next.js (App Router), Prisma on SQLite, Tailwind CSS, and pnpm.
 
-The current slice includes:
+## Running locally
 
-- A platform-shaped data model for users, sessions, applicants, review decisions, and audit events.
-- A deterministic seed with 2 users and 30 applicants.
-- Session-based authentication (email + password) with an HTTP-only session cookie.
-- Role-based access control with two roles:
-  - **Reviewers** see the queue and can approve/reject cases.
-  - **Admins** additionally see all decisions (`/decisions`) and the full audit log (`/audit`).
-- Server-enforced permissions: the admin pages and the decision mutation verify the session and role on the server, not just via hidden UI.
-- A pending-first applicant queue with status, risk, and text filters.
-- Applicant details with identity, document, assignment, decision, and activity data.
-
-## Local setup
+Requires Node.js 20.9 or later (a Next.js 16 requirement); tested on
+v20.18.1. No Docker and no external services are required — the app uses a
+local SQLite file.
 
 ```bash
 npx --yes pnpm@10.13.1 install
@@ -22,20 +16,12 @@ npx --yes pnpm@10.13.1 db:setup
 npx --yes pnpm@10.13.1 dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Then open http://localhost:3000 (it redirects to the login page).
 
-`db:setup` creates the SQLite database, applies migrations, generates the Prisma client, and runs the seed.
+`db:setup` creates the SQLite database, applies migrations, generates the
+Prisma client, and runs the seed (2 users and 30 applicants).
 
-## Seeded users
-
-These credentials are local development fixtures for signing in:
-
-| Role | Email | Password |
-| --- | --- | --- |
-| Reviewer | `reviewer@kyc.test` | `reviewer-demo` |
-| Admin | `admin@kyc.test` | `admin-demo` |
-
-## Commands
+Other commands:
 
 ```bash
 npx --yes pnpm@10.13.1 lint
@@ -43,3 +29,33 @@ npx --yes pnpm@10.13.1 typecheck
 npx --yes pnpm@10.13.1 build
 npx --yes pnpm@10.13.1 db:seed
 ```
+
+## Logging in
+
+The seed script creates two users. These are local development credentials
+only.
+
+| Role     | Email                | Password        |
+| -------- | -------------------- | --------------- |
+| Reviewer | `reviewer@kyc.test`  | `reviewer-demo` |
+| Admin    | `admin@kyc.test`     | `admin-demo`    |
+
+## Using the app
+
+1. Log in as the reviewer (`reviewer@kyc.test` / `reviewer-demo`).
+2. Browse the applicant queue. Filter by status, risk, or text; pending
+   applicants are shown first.
+3. Open an applicant to see their identity, document, assignment, decision,
+   and activity details.
+4. Approve or reject the applicant. A decision reason is required to submit.
+5. Log out, log in as the admin (`admin@kyc.test` / `admin-demo`), and open
+   `/audit` to see every decision recorded with its before/after status.
+
+## What's implemented
+
+- Applicant queue with status, risk, and text filters (pending-first).
+- Approve/reject flow with a required decision reason.
+- Server-side enforcement of role permissions and status transitions; the
+  session and role are checked on the server, not just hidden in the UI.
+- Append-only audit log recording each decision with its before/after
+  status, with an admin-only UI at `/audit`.
