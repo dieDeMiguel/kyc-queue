@@ -109,6 +109,8 @@ model AuditEvent {
   applicant   Applicant? @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   action      String
   details     String
+  fromStatus  ApplicantStatus?
+  toStatus    ApplicantStatus?
   createdAt   DateTime   @default(now())
 
   @@index([applicantId, createdAt])

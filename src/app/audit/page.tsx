@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AppShell } from "@/app/_components/app-shell";
+import { StatusBadge } from "@/app/_components/applicant-badges";
 import { requireRole } from "@/lib/auth";
 import { getAuditEvents } from "@/lib/admin";
 
@@ -56,6 +57,15 @@ export default async function AuditPage() {
                   <p className="mt-1 text-sm leading-6 text-ink-2">
                     {event.details}
                   </p>
+                  {event.fromStatus && event.toStatus ? (
+                    <p className="mt-2 flex flex-wrap items-center gap-1.5">
+                      <StatusBadge status={event.fromStatus} />
+                      <span aria-hidden className="text-muted">
+                        →
+                      </span>
+                      <StatusBadge status={event.toStatus} />
+                    </p>
+                  ) : null}
                   <p className="mt-2 flex flex-wrap items-center gap-x-2 text-xs text-muted">
                     <span>
                       {event.actor

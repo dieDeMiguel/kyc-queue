@@ -71,6 +71,8 @@ export async function decideApplicant(
         applicantId: applicant.id,
         action: approved ? "APPLICANT_APPROVED" : "APPLICANT_REJECTED",
         details: reason,
+        fromStatus: applicant.status,
+        toStatus: nextStatus,
       },
     }),
   ]);

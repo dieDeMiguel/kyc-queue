@@ -211,6 +211,10 @@ async function main() {
           applicantId: applicant.id,
           action: approved ? "APPLICANT_APPROVED" : "APPLICANT_REJECTED",
           details: reason,
+          fromStatus: ApplicantStatus.IN_REVIEW,
+          toStatus: approved
+            ? ApplicantStatus.APPROVED
+            : ApplicantStatus.REJECTED,
           createdAt: reviewedAt,
         },
       });
