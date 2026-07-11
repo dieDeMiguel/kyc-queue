@@ -6,10 +6,13 @@ The current slice includes:
 
 - A platform-shaped data model for users, sessions, applicants, review decisions, and audit events.
 - A deterministic seed with 2 users and 30 applicants.
+- Session-based authentication (email + password) with an HTTP-only session cookie.
+- Role-based access control with two roles:
+  - **Reviewers** see the queue and can approve/reject cases.
+  - **Admins** additionally see all decisions (`/decisions`) and the full audit log (`/audit`).
+- Server-enforced permissions: the admin pages and the decision mutation verify the session and role on the server, not just via hidden UI.
 - A pending-first applicant queue with status, risk, and text filters.
 - Applicant details with identity, document, assignment, decision, and activity data.
-
-Authentication and approve/reject mutations are planned for the next slice.
 
 ## Local setup
 
@@ -25,7 +28,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Seeded users
 
-These credentials are local development fixtures for the upcoming session-login slice:
+These credentials are local development fixtures for signing in:
 
 | Role | Email | Password |
 | --- | --- | --- |
