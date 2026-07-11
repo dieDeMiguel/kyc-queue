@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { AppShell } from "@/app/_components/app-shell";
 import { RiskBadge, StatusBadge } from "@/app/_components/applicant-badges";
+import { ReviewActions } from "@/app/_components/review-actions";
 import { formatDocumentType, getApplicantById } from "@/lib/applicants";
+import { canDecide } from "@/lib/review";
 
 export const metadata: Metadata = {
   title: "Applicant details",
@@ -166,6 +168,10 @@ export default async function ApplicantPage({
                 </p>
               </div>
             </section>
+
+            {canDecide(applicant.status) ? (
+              <ReviewActions applicantId={applicant.id} />
+            ) : null}
 
             {applicant.reviewActions[0] ? (
               <section className="mt-5 border border-rule bg-paper p-5">
