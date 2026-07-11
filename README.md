@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KYC Review Queue
 
-## Getting Started
+A role-aware KYC operations workspace built with Next.js, Prisma, and SQLite.
 
-First, run the development server:
+The current slice includes:
+
+- A platform-shaped data model for users, sessions, applicants, review decisions, and audit events.
+- A deterministic seed with 2 users and 30 applicants.
+- A pending-first applicant queue with status, risk, and text filters.
+- Applicant details with identity, document, assignment, decision, and activity data.
+
+Authentication and approve/reject mutations are planned for the next slice.
+
+## Local setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx --yes pnpm@10.13.1 install
+npx --yes pnpm@10.13.1 db:setup
+npx --yes pnpm@10.13.1 dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`db:setup` creates the SQLite database, applies migrations, generates the Prisma client, and runs the seed.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Seeded users
 
-## Learn More
+These credentials are local development fixtures for the upcoming session-login slice:
 
-To learn more about Next.js, take a look at the following resources:
+| Role | Email | Password |
+| --- | --- | --- |
+| Reviewer | `reviewer@kyc.test` | `reviewer-demo` |
+| Admin | `admin@kyc.test` | `admin-demo` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx --yes pnpm@10.13.1 lint
+npx --yes pnpm@10.13.1 typecheck
+npx --yes pnpm@10.13.1 build
+npx --yes pnpm@10.13.1 db:seed
+```

@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+enum Role {
+  REVIEWER
+  ADMIN
+}
+
+enum ApplicantStatus {
+  PENDING
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum DocumentType {
+  PASSPORT
+  NATIONAL_ID
+  DRIVERS_LICENSE
+  RESIDENCE_PERMIT
+}
+
+enum ReviewDecision {
+  APPROVE
+  REJECT
+}
+
+model User {
+  id                 String         @id @default(cuid())
+  email              String         @unique
+  name               String
+  role               Role
+  passwordHash       String
+  sessions           Session[]
+  assignedApplicants Applicant[]    @relation("AssignedReviewer")
+  reviewActions      ReviewAction[]
+  auditEvents        AuditEvent[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId, expiresAt])
+}
+
+model Applicant {
+  id                 String          @id @default(cuid())
+  caseId             String          @unique
+  firstName          String
+  lastName           String
+  email              String
+  country            String
+  countryCode        String
+  dateOfBirth        DateTime
+  documentType       DocumentType
+  documentNumber     String
+  riskScore          Int
+  riskLevel          RiskLevel
+  status             ApplicantStatus @default(PENDING)
+  assignedReviewerId String?
+  assignedReviewer   User?           @relation("AssignedReviewer", fields: [assignedReviewerId], references: [id], onDelete: SetNull)
+  reviewActions      ReviewAction[]
+  auditEvents        AuditEvent[]
+  submittedAt        DateTime        @default(now())
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
+  @@index([status, riskLevel])
+  @@index([submittedAt])
+}
+
+model ReviewAction {
+  id          String         @id @default(cuid())
+  applicantId String
+  applicant   Applicant      @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  actorId     String
+  actor       User           @relation(fields: [actorId], references: [id], onDelete: Restrict)
+  decision    ReviewDecision
+  reason      String
+  createdAt   DateTime       @default(now())
+
+  @@index([applicantId, createdAt])
+}
+
+model AuditEvent {
+  id          String     @id @default(cuid())
+  actorId     String?
+  actor       User?      @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  applicantId String?
+  applicant   Applicant? @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  action      String
+  details     String
+  createdAt   DateTime   @default(now())
+
+  @@index([applicantId, createdAt])
+  @@index([actorId, createdAt])
+}
