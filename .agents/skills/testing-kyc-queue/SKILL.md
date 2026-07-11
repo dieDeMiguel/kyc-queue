@@ -20,9 +20,16 @@ npx --yes pnpm@10.13.1 db:seed
 npx --yes pnpm@10.13.1 dev
 ```
 
-`db:setup` applies migrations and generates Prisma Client. Run `db:seed` explicitly before testing when the fixture state must be reset; an already-synchronized `prisma migrate dev` may not rerun the seed.
+`db:setup` applies migrations and generates Prisma Client. Run `db:seed` explicitly before testing when the fixture state must be reset; an already-synchronized `prisma migrate dev` may not rerun the seed. Reseed before RBAC tests since review actions mutate applicant status.
 
-The current queue slice has no login gate or external service dependency.
+## Authentication & roles
+
+The app requires login (no external service). Seeded demo accounts (also shown on `/login`):
+
+- Reviewer: `reviewer@kyc.test` / `reviewer-demo` (Morgan Lee) — sees the queue, opens cases, and approves/rejects.
+- Admin: `admin@kyc.test` / `admin-demo` (Alex Rivera) — everything reviewers can do, plus `/decisions` and `/audit`.
+
+Unauthenticated requests to any non-`/login` path redirect to `/login`. RBAC is server-enforced, not just hidden nav: a reviewer directly visiting `/audit` or `/decisions` is redirected to `/?denied=1` (banner: "That area is restricted to administrators."). To prove server enforcement, navigate by typing the URL directly, not by clicking nav links. The approve/reject reason field is `required` (client-side) and also validated server-side.
 
 ## Deterministic fixtures
 
