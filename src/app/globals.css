@@ -1,26 +1,262 @@
+/* Hallmark · macrostructure: Workbench · tone: operational · anchor hue: blue
+ * nav: N13 · footer: none · enrichment: none
+ */
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "../../tokens.css";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-paper: var(--kyc-paper);
+  --color-paper-2: var(--kyc-paper-2);
+  --color-paper-3: var(--kyc-paper-3);
+  --color-ink: var(--kyc-ink);
+  --color-ink-2: var(--kyc-ink-2);
+  --color-muted: var(--kyc-muted);
+  --color-neutral: var(--kyc-neutral);
+  --color-rule: var(--kyc-rule);
+  --color-rule-2: var(--kyc-rule-2);
+  --color-accent: var(--kyc-accent);
+  --color-accent-soft: var(--kyc-accent-soft);
+  --color-accent-rule: var(--kyc-accent-rule);
+  --color-accent-strong: var(--kyc-accent-strong);
+  --color-focus: var(--kyc-focus);
+  --color-success: var(--kyc-success);
+  --color-success-soft: var(--kyc-success-soft);
+  --color-success-rule: var(--kyc-success-rule);
+  --color-success-strong: var(--kyc-success-strong);
+  --color-warning: var(--kyc-warning);
+  --color-warning-soft: var(--kyc-warning-soft);
+  --color-warning-rule: var(--kyc-warning-rule);
+  --color-warning-strong: var(--kyc-warning-strong);
+  --color-danger: var(--kyc-danger);
+  --color-danger-soft: var(--kyc-danger-soft);
+  --color-danger-rule: var(--kyc-danger-rule);
+  --color-danger-strong: var(--kyc-danger-strong);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  min-height: 100%;
+  overflow-x: clip;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper-2);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app-search {
+  display: grid;
+  min-height: var(--control-height);
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  border: var(--rule-fine) solid var(--color-rule-2);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+}
+
+.app-search:focus-within {
+  outline-color: var(--color-focus);
+}
+
+.app-search input {
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  padding-inline: var(--space-xs);
+  color: var(--color-ink);
+  outline: 0;
+}
+
+.app-search input::placeholder {
+  color: var(--color-muted);
+}
+
+.app-search__shortcut {
+  margin-inline-end: var(--space-2xs);
+  border: var(--rule-fine) solid var(--color-rule);
+  background: var(--color-paper-2);
+  padding: 2px var(--space-2xs);
+  color: var(--color-muted);
+  font-family: var(--font-outlier);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+.app-search__button {
+  align-self: stretch;
+  border: 0;
+  border-inline-start: var(--rule-fine) solid var(--color-rule-2);
+  background: var(--color-ink);
+  padding-inline: var(--space-xs);
+  color: var(--color-accent-ink);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.app-search__button:hover {
+  background: var(--color-ink-2);
+}
+
+.app-search__button:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 1px;
+}
+
+.app-search__button:active {
+  background: var(--color-neutral);
+}
+
+.app-search__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.filter-control {
+  width: 100%;
+  min-height: var(--control-height);
+  border: var(--rule-fine) solid var(--color-rule-2);
+  background: var(--color-paper);
+  padding-inline: var(--space-xs);
+  color: var(--color-ink);
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+}
+
+.filter-control:focus-visible {
+  outline-color: var(--color-focus);
+}
+
+.filter-control:active {
+  background: var(--color-paper-3);
+}
+
+.filter-control:disabled,
+.app-search:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.filter-control[aria-invalid="true"],
+.app-search:has(input[aria-invalid="true"]) {
+  border-color: var(--kyc-danger);
+}
+
+.filter-control[data-status="success"],
+.app-search:has(input[data-status="success"]) {
+  border-color: var(--kyc-success);
+}
+
+.primary-button,
+.secondary-button,
+.back-link {
+  display: inline-flex;
+  min-height: var(--control-height);
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding-inline: var(--space-sm);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.primary-button {
+  border: var(--rule-fine) solid var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-accent-ink);
+}
+
+.primary-button:hover {
+  background: var(--color-ink-2);
+}
+
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.back-link:focus-visible {
+  outline-color: var(--color-focus);
+}
+
+.primary-button:active {
+  background: var(--color-neutral);
+}
+
+.primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.secondary-button {
+  border: var(--rule-fine) solid var(--color-rule-2);
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.secondary-button:hover {
+  background: var(--color-paper-2);
+}
+
+.secondary-button:active {
+  background: var(--color-paper-3);
+}
+
+.secondary-button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.back-link {
+  padding-inline: 0;
+  color: var(--color-ink-2);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+}
+
+.back-link:hover {
+  color: var(--color-ink);
+  text-decoration-color: currentColor;
+}
+
+.back-link:active {
+  color: var(--color-neutral);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .app-search:hover,
+  .filter-control:hover {
+    background: var(--color-paper-2);
+  }
+}
+
+@media (max-width: 39.999rem) {
+  .app-search__shortcut {
+    display: none;
+  }
+
+  .app-search {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0ms !important;
+  }
 }

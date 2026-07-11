@@ -1,0 +1,78 @@
+:root {
+  --kyc-paper: oklch(100% 0.004 255);
+  --kyc-paper-2: oklch(98% 0.006 255);
+  --kyc-paper-3: oklch(95% 0.008 255);
+  --kyc-ink: oklch(18% 0.016 255);
+  --kyc-ink-2: oklch(32% 0.018 255);
+  --kyc-muted: oklch(42% 0.018 255);
+  --kyc-neutral: oklch(55% 0.016 255);
+  --kyc-rule: oklch(90% 0.009 255);
+  --kyc-rule-2: oklch(78% 0.012 255);
+  --kyc-accent: oklch(55% 0.22 258);
+  --kyc-accent-soft: oklch(96% 0.026 258);
+  --kyc-accent-rule: oklch(86% 0.08 258);
+  --kyc-accent-strong: oklch(35% 0.15 258);
+  --kyc-accent-ink: oklch(100% 0.004 255);
+  --kyc-focus: oklch(55% 0.22 258);
+  --kyc-success: oklch(56% 0.14 148);
+  --kyc-success-soft: oklch(96% 0.03 148);
+  --kyc-success-rule: oklch(84% 0.08 148);
+  --kyc-success-strong: oklch(34% 0.1 148);
+  --kyc-warning: oklch(62% 0.15 72);
+  --kyc-warning-soft: oklch(96% 0.035 72);
+  --kyc-warning-rule: oklch(84% 0.09 72);
+  --kyc-warning-strong: oklch(34% 0.09 62);
+  --kyc-danger: oklch(56% 0.2 25);
+  --kyc-danger-soft: oklch(96% 0.03 25);
+  --kyc-danger-rule: oklch(84% 0.08 25);
+  --kyc-danger-strong: oklch(35% 0.14 25);
+
+  --color-paper: var(--kyc-paper);
+  --color-paper-2: var(--kyc-paper-2);
+  --color-paper-3: var(--kyc-paper-3);
+  --color-ink: var(--kyc-ink);
+  --color-ink-2: var(--kyc-ink-2);
+  --color-muted: var(--kyc-muted);
+  --color-neutral: var(--kyc-neutral);
+  --color-rule: var(--kyc-rule);
+  --color-rule-2: var(--kyc-rule-2);
+  --color-accent: var(--kyc-accent);
+  --color-accent-ink: var(--kyc-accent-ink);
+  --color-focus: var(--kyc-focus);
+
+  --font-display: var(--font-geist-sans);
+  --font-body: var(--font-geist-sans);
+  --font-outlier: var(--font-geist-mono);
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-display: 2.5rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+
+  --rule-hair: 1px;
+  --rule-fine: 1px;
+  --radius-card: 0;
+  --radius-pill: 999px;
+  --radius-input: 0;
+  --shadow-card: none;
+  --control-height: 2.75rem;
+}
