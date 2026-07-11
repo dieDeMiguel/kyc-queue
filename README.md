@@ -1,28 +1,8 @@
 # KYC Review Queue
 
-A prototype KYC review queue built with Devin in about two hours as a
-build-vs-buy evaluation artifact. It replicates the core of an internal
-review tool: an applicant queue, a review flow, role-based access control,
-and an audit log. It is a prototype for evaluating the approach, not a
-production system.
-
-## Demo walkthrough
-
-Two users are created by the seed script. These are local development
-credentials only.
-
-| Role     | Email                | Password        |
-| -------- | -------------------- | --------------- |
-| Reviewer | `reviewer@kyc.test`  | `reviewer-demo` |
-| Admin    | `admin@kyc.test`     | `admin-demo`    |
-
-A four-step tour:
-
-1. Log in as the reviewer (`reviewer@kyc.test` / `reviewer-demo`).
-2. Open a pending applicant from the queue.
-3. Reject it and enter a reason (a reason is required to submit a decision).
-4. Log out, log in as the admin (`admin@kyc.test` / `admin-demo`), and open
-   `/audit` to see the rejection recorded in the audit log.
+A role-aware KYC review queue: an applicant queue, a review flow with
+approve/reject decisions, role-based access control, and an audit log.
+Built with Next.js (App Router), Prisma on SQLite, Tailwind CSS, and pnpm.
 
 ## Running locally
 
@@ -50,6 +30,27 @@ npx --yes pnpm@10.13.1 build
 npx --yes pnpm@10.13.1 db:seed
 ```
 
+## Logging in
+
+The seed script creates two users. These are local development credentials
+only.
+
+| Role     | Email                | Password        |
+| -------- | -------------------- | --------------- |
+| Reviewer | `reviewer@kyc.test`  | `reviewer-demo` |
+| Admin    | `admin@kyc.test`     | `admin-demo`    |
+
+## Using the app
+
+1. Log in as the reviewer (`reviewer@kyc.test` / `reviewer-demo`).
+2. Browse the applicant queue. Filter by status, risk, or text; pending
+   applicants are shown first.
+3. Open an applicant to see their identity, document, assignment, decision,
+   and activity details.
+4. Approve or reject the applicant. A decision reason is required to submit.
+5. Log out, log in as the admin (`admin@kyc.test` / `admin-demo`), and open
+   `/audit` to see every decision recorded with its before/after status.
+
 ## What's implemented
 
 - Applicant queue with status, risk, and text filters (pending-first).
@@ -58,30 +59,3 @@ npx --yes pnpm@10.13.1 db:seed
   session and role are checked on the server, not just hidden in the UI.
 - Append-only audit log recording each decision with its before/after
   status, with an admin-only UI at `/audit`.
-
-## What's deliberately stubbed or out of scope
-
-These are scoping decisions for a two-hour prototype, not oversights.
-
-- SSO / IdP integration — a real work item; stubbed here with seeded
-  email/password credentials.
-- Granular permissions — only two roles (reviewer, admin), not fine-grained
-  policies.
-- External data connectors — no integrations with KYC vendors or internal
-  systems; data comes from the seed.
-- Observability — no metrics, tracing, or structured logging.
-- Production deployment / hosting — local dev only; no infra or CI/CD.
-- Real KYC data and document upload — applicants are mock records; there is
-  no file upload or identity verification.
-
-## How this was built
-
-Built across several Devin sessions, one PR per feature, with human review
-between sessions:
-[applicant queue](https://github.com/dieDeMiguel/kyc-queue/pull/1),
-[session auth and RBAC](https://github.com/dieDeMiguel/kyc-queue/pull/4),
-and [before/after status in the audit log](https://github.com/dieDeMiguel/kyc-queue/pull/6).
-The stack is Next.js (App Router) with TypeScript, Tailwind CSS, and pnpm.
-Implementation choices such as the ORM (Prisma on SQLite) and the auth
-approach (session cookie with server-side role checks) were delegated to
-the agent.
