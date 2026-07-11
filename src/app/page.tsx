@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AppShell } from "@/app/_components/app-shell";
 import { ApplicantTable } from "@/app/_components/applicant-table";
+import { requireUser } from "@/lib/auth";
 import {
   applicantStatuses,
   formatApplicantStatus,
@@ -35,7 +36,9 @@ export default async function Home({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
+  await requireUser();
   const queryParams = await searchParams;
+  const denied = firstValue(queryParams.denied) === "1";
   const statusValue = firstValue(queryParams.status);
   const riskValue = firstValue(queryParams.risk);
   const query = firstValue(queryParams.q)?.trim().slice(0, 80) ?? "";
@@ -64,6 +67,14 @@ export default async function Home({
       <main className="mx-auto w-full max-w-[1440px] px-4 py-8 sm:px-6 sm:py-10">
         <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_260px] xl:gap-10">
           <div className="min-w-0">
+            {denied ? (
+              <p
+                role="alert"
+                className="mb-6 border border-warning-rule bg-warning-soft px-4 py-3 text-[13px] text-warning-strong"
+              >
+                That area is restricted to administrators.
+              </p>
+            ) : null}
             <header className="border-b border-rule pb-7">
               <p className="text-xs uppercase tracking-[0.08em] text-muted">
                 Reviewer workspace

@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { AppShell } from "@/app/_components/app-shell";
 import { RiskBadge, StatusBadge } from "@/app/_components/applicant-badges";
+import { ReviewActions } from "@/app/applicants/[id]/review-actions";
+import { requireUser } from "@/lib/auth";
 import { formatDocumentType, getApplicantById } from "@/lib/applicants";
+import { canDecide, decisionBlockedMessage } from "@/lib/review";
 
 export const metadata: Metadata = {
   title: "Applicant details",
@@ -31,6 +34,7 @@ export default async function ApplicantPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireUser();
   const { id } = await params;
   const applicant = await getApplicantById(id);
 
@@ -39,6 +43,7 @@ export default async function ApplicantPage({
   }
 
   const fullName = `${applicant.firstName} ${applicant.lastName}`;
+  const decidable = canDecide(applicant.status);
 
   return (
     <AppShell>
@@ -165,6 +170,21 @@ export default async function ApplicantPage({
                   inspect the supplied identity evidence.
                 </p>
               </div>
+            </section>
+
+            <section className="mt-5 border border-rule bg-paper p-5">
+              <p className="text-xs uppercase tracking-[0.08em] text-muted">
+                Decision
+              </p>
+              {decidable ? (
+                <div className="mt-4">
+                  <ReviewActions applicantId={applicant.id} />
+                </div>
+              ) : (
+                <p className="mt-4 text-[13px] leading-5 text-ink-2">
+                  {decisionBlockedMessage(applicant.status)}
+                </p>
+              )}
             </section>
 
             {applicant.reviewActions[0] ? (
